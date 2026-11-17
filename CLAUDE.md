@@ -10,7 +10,7 @@ Full design (tables, endpoints, decisions): @docs/DESIGN.md
 - **Backend** (`/backend`): Spring Boot 4.1, Java 21 (`<java.version>21</java.version>`), Maven wrapper (`./mvnw`). Note: Boot 4 test annotations moved packages (e.g. `org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc`)
 - **AI**: Spring AI 2.0 (Anthropic starter), used only inside `TutorClient` in `com.kletsai.ai`. Model id is set in config (default `claude-opus-5-5`). Newer Claude models reject `temperature`/`top_p` and disabled thinking, so don't set those
 - **DB**: PostgreSQL 16 in Docker Compose, schema owned by Flyway (`backend/src/main/resources/db/migration`)
-- **Frontend** (`/frontend`): Angular (latest), standalone components, signals, `@angular/pwa`
+- **Frontend** (`/frontend`): Angular 22, standalone components, signals, zoneless, Vitest, `@angular/pwa`. Needs **Node 24 LTS** (Node 23 can't run the tests and its npm 10 install fails)
 
 ## Running locally
 ```bash
@@ -39,7 +39,7 @@ Tests never call the real Claude API. Use a fake `TutorClient`.
 - **Backend**: packages by feature (`flashcard`, `review`, `chat`, `mistake`, `ai`, `common`). Use records for DTOs and constructor injection. Keep SM-2 a pure class with no Spring or DB code. Return errors as RFC 7807 `ProblemDetail`.
 - **AI**: only `TutorClient` talks to Claude. The tutor's reply is structured JSON (`reply[{nl,en}]` + `corrections[]`), never free text that has to be parsed. Prompts live in `resources/prompts/`.
 - **Tutor behaviour**: simple A1 Dutch, short sentences, every Dutch line followed by its English translation, gentle corrections, grammar explained by comparing with English.
-- **Frontend**: mobile-first, designed at 375px wide first. One exercise per screen. Tap targets at least 48px. Feature folders under `src/app/features`. All HTTP goes through `core/` services.
+- **Frontend**: mobile-first, designed at 375px wide first. Colours are CSS variables in `src/styles.scss` (light + dark). Keep logic in plain TS classes (e.g. `ReviewSession`) so it can be tested without TestBed. Use `core/uuid.ts`, not `crypto.randomUUID()`, which doesn't exist over plain http on the phone. One exercise per screen. Tap targets at least 48px. Feature folders under `src/app/features`. All HTTP goes through `core/` services.
 - **Offline**: reviews go into an IndexedDB queue with a client-generated UUID and are sent to `POST /api/reviews/sync`. The server is the only place SM-2 runs.
 
 ## Working agreement

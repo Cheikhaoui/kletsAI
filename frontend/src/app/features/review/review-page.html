@@ -1,0 +1,67 @@
+@if (loading()) {
+  <p class="center muted">Loading…</p>
+} @else if (error(); as message) {
+  <div class="center">
+    <p>{{ message }}</p>
+    <a routerLink="/" class="btn">Back home</a>
+  </div>
+} @else if (done()) {
+  <div class="center finished">
+    <h1>Klaar!</h1>
+    <p class="muted">Done! {{ progress()?.reviewed ?? 0 }} answers this session.</p>
+    @if (sync.pendingCount() > 0) {
+      <p class="muted small">{{ sync.pendingCount() }} reviews waiting to sync</p>
+    }
+    <a routerLink="/" class="btn btn-primary">Back home</a>
+  </div>
+} @else if (card(); as c) {
+  <div class="review">
+    <div class="progress" aria-label="Progress">
+      <div class="bar" [style.width.%]="(progress()!.finished / progress()!.total) * 100"></div>
+    </div>
+    <p class="muted small count">{{ progress()!.finished }} / {{ progress()!.total }}</p>
+
+    <section class="card" (click)="reveal()">
+      @if (c.cardType === 'WORD' && c.article && !revealed()) {
+        <p class="hint">de of het?</p>
+      }
+      <p class="front">
+        @if (revealed() && c.article) {
+          <span class="article" [class.het]="c.article === 'HET'">{{ c.article.toLowerCase() }}</span>
+        }
+        {{ c.dutch }}
+      </p>
+
+      @if (revealed()) {
+        <p class="back">{{ c.english }}</p>
+        @if (c.exampleNl) {
+          <div class="example">
+            <p lang="nl">{{ c.exampleNl }}</p>
+            @if (c.exampleEn) {
+              <p class="muted">{{ c.exampleEn }}</p>
+            }
+          </div>
+        }
+      }
+    </section>
+
+    <div class="actions">
+      @if (!revealed()) {
+        <button type="button" class="btn btn-primary wide" (click)="reveal()">Show answer</button>
+      } @else {
+        <div class="grades">
+          <button type="button" class="btn grade again" (click)="grade(Grade.AGAIN)">Again</button>
+          <button type="button" class="btn grade hard" (click)="grade(Grade.HARD)">Hard</button>
+          <button type="button" class="btn grade good" (click)="grade(Grade.GOOD)">Good</button>
+          <button type="button" class="btn grade easy" (click)="grade(Grade.EASY)">Easy</button>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="center">
+    <h1>Nothing due</h1>
+    <p class="muted">No cards to review right now. Come back later or add new cards.</p>
+    <a routerLink="/" class="btn">Back home</a>
+  </div>
+}

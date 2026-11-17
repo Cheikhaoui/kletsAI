@@ -1,0 +1,115 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.review {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 12px;
+}
+
+.progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+
+  .bar {
+    height: 100%;
+    background: var(--accent);
+    transition: width 200ms ease;
+  }
+}
+
+.count {
+  margin: 0;
+  text-align: right;
+}
+
+.card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 24px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-height: 280px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.front {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.article {
+  color: var(--de);
+  font-weight: 600;
+
+  &.het {
+    color: var(--het);
+  }
+}
+
+.back {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.example {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  width: 100%;
+
+  p {
+    margin: 4px 0;
+  }
+}
+
+.actions {
+  padding-bottom: 4px;
+}
+
+.wide {
+  width: 100%;
+}
+
+.grades {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.grade {
+  min-height: 64px;
+  font-size: 1.1rem;
+  color: #fff;
+  border: none;
+
+  &.again { background: var(--again); }
+  &.hard { background: var(--hard); }
+  &.good { background: var(--good); }
+  &.easy { background: var(--easy); }
+}
+
+.finished h1 {
+  font-size: 2.5rem;
+  margin-bottom: 4px;
+}
