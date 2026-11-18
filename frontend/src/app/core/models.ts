@@ -46,3 +46,56 @@ export interface SyncResponse {
   unknownCards: string[];
   cards: Card[];
 }
+
+// ---- Chat ----
+
+export type ScenarioId = 'FREE' | 'TRAIN_TICKET' | 'DOCTOR' | 'COLLEAGUE';
+export type MistakeCategory =
+  | 'WORD_ORDER' | 'DE_HET' | 'VERB_CONJUGATION' | 'SPELLING' | 'VOCABULARY' | 'PREPOSITION' | 'OTHER';
+
+export interface Scenario {
+  id: ScenarioId;
+  titleNl: string;
+  titleEn: string;
+  description: string;
+}
+
+export interface Line {
+  nl: string;
+  en: string;
+}
+
+export interface Correction {
+  original: string;
+  corrected: string;
+  explanationEn: string | null;
+  category: MistakeCategory;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'USER' | 'ASSISTANT';
+  /** USER only */
+  text: string | null;
+  /** ASSISTANT only */
+  lines: Line[] | null;
+  /** USER only: what the tutor corrected in this message */
+  corrections: Correction[] | null;
+  createdAt: string;
+}
+
+export interface ConversationSummary {
+  id: string;
+  scenario: ScenarioId;
+  title: string;
+  createdAt: string;
+}
+
+export interface ConversationDetail extends ConversationSummary {
+  messages: ChatMessage[];
+}
+
+export interface TurnResult {
+  learner: ChatMessage;
+  tutor: ChatMessage;
+}

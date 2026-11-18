@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reply", "corrections"],
+  "properties": {
+    "reply": {
+      "type": "array",
+      "description": "The tutor's message: 1-4 short Dutch sentences, each with its English translation.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["nl", "en"],
+        "properties": {
+          "nl": { "type": "string", "description": "One simple A1 Dutch sentence." },
+          "en": { "type": "string", "description": "Natural English translation of that sentence." }
+        }
+      }
+    },
+    "corrections": {
+      "type": "array",
+      "description": "Real mistakes in the learner's latest message. Empty if there were none.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["original", "corrected", "explanationEn", "category"],
+        "properties": {
+          "original": { "type": "string" },
+          "corrected": { "type": "string" },
+          "explanationEn": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["WORD_ORDER", "DE_HET", "VERB_CONJUGATION", "SPELLING", "VOCABULARY", "PREPOSITION", "OTHER"]
+          },
+          "card": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["cardType", "dutch", "english", "article"],
+            "properties": {
+              "cardType": { "type": "string", "enum": ["WORD", "SENTENCE"] },
+              "dutch": { "type": "string" },
+              "english": { "type": "string" },
+              "article": { "anyOf": [{ "type": "string", "enum": ["DE", "HET"] }, { "type": "null" }] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

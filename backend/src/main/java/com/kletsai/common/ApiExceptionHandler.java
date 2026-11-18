@@ -1,5 +1,6 @@
 package com.kletsai.common;
 
+import com.kletsai.ai.TutorUnavailableException;
 import com.kletsai.flashcard.DuplicateCardException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -18,6 +19,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DuplicateCardException.class)
     ProblemDetail duplicate(DuplicateCardException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+    }
+
+    @ExceptionHandler(TutorUnavailableException.class)
+    ProblemDetail tutorUnavailable(TutorUnavailableException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

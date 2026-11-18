@@ -12,6 +12,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     <nav class="tabs" aria-label="Main">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a routerLink="/review" routerLinkActive="active">Review</a>
+      <a routerLink="/chat" routerLinkActive="active">Chat</a>
       <a routerLink="/cards" routerLinkActive="active">Cards</a>
     </nav>
   `,
@@ -22,7 +23,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       width: 100%; max-width: 560px; margin: 0 auto; padding: 16px 16px 24px;
     }
     .tabs {
-      position: sticky; bottom: 0; display: grid; grid-template-columns: repeat(3, 1fr);
+      position: sticky; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr);
       background: var(--surface); border-top: 1px solid var(--border);
       padding-bottom: env(safe-area-inset-bottom);
       a {

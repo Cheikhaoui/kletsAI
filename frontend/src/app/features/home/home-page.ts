@@ -27,6 +27,7 @@ import { ReviewSync } from '../../core/review-sync';
 
     <div class="stack">
       <a routerLink="/review" class="btn btn-primary">Review cards</a>
+      <a routerLink="/chat" class="btn">Practise a conversation</a>
       <a routerLink="/cards/new" class="btn">Add a card</a>
     </div>
   `,

@@ -14,6 +14,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const tabs = (fixture.nativeElement as HTMLElement).querySelectorAll('nav.tabs a');
-    expect([...tabs].map((a) => a.textContent?.trim())).toEqual(['Home', 'Review', 'Cards']);
+    expect([...tabs].map((a) => a.textContent?.trim())).toEqual(['Home', 'Review', 'Chat', 'Cards']);
   });
 });

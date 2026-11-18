@@ -1,0 +1,52 @@
+<header class="top">
+  <a routerLink="/chat" class="back" aria-label="Back to scenes">‹</a>
+  <h1>{{ title() }}</h1>
+</header>
+
+<div class="messages" #scroller>
+  @for (m of messages(); track m.id) {
+    @if (m.role === 'ASSISTANT') {
+      <div class="bubble tutor">
+        @for (l of m.lines; track $index) {
+          <p class="nl" lang="nl">{{ l.nl }}</p>
+          <p class="en">{{ l.en }}</p>
+        }
+      </div>
+    } @else {
+      <div class="bubble learner" lang="nl">{{ m.text }}</div>
+      @for (c of m.corrections ?? []; track $index) {
+        <div class="correction">
+          <span class="tag">{{ labels[c.category] }}</span>
+          <p class="wrong" lang="nl"><s>{{ c.original }}</s></p>
+          <p class="right" lang="nl">{{ c.corrected }}</p>
+          @if (c.explanationEn) {
+            <p class="why">{{ c.explanationEn }}</p>
+          }
+        </div>
+      }
+    }
+  }
+  @if (sending()) {
+    <div class="bubble tutor typing" aria-label="Tutor is typing"><span></span><span></span><span></span></div>
+  }
+</div>
+
+@if (error(); as e) {
+  <p class="error" role="alert">{{ e }}</p>
+}
+
+<form class="composer" (submit)="$event.preventDefault(); send()">
+  <textarea
+    rows="1"
+    lang="nl"
+    placeholder="Typ in het Nederlands…"
+    aria-label="Your message"
+    autocapitalize="sentences"
+    spellcheck="false"
+    maxlength="1000"
+    [value]="draft()"
+    (input)="draft.set($any($event.target).value)"
+    (keydown)="onKeydown($event)"
+  ></textarea>
+  <button type="submit" class="btn btn-primary send" [disabled]="sending() || !draft().trim()">Stuur</button>
+</form>

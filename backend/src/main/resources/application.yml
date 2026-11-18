@@ -1,13 +1,30 @@
+# Everything secret or environment-specific comes from environment variables.
+# The defaults after ":" are for local development only (docker compose Postgres, Angular on :4200).
+server:
+  port: ${PORT:8080}
+  # Render terminates TLS in front of the app; trust its X-Forwarded-* headers.
+  forward-headers-strategy: framework
+
 spring:
   application:
     name: kletsai
   config:
-    # Load secrets from the repo-root .env when running from /backend (missing file is fine).
-    import: optional:file:../.env[.properties]
+    # Local dev: load secrets from the repo-root .env, whether started from /backend (mvnw) or the repo root (IDE).
+    # Missing files are fine; on Render the variables come from the service's environment.
+    import:
+      - optional:file:../.env[.properties]
+      - optional:file:.env[.properties]
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/kletsai}
-    username: ${DB_USER:kletsai}
-    password: ${DB_PASSWORD:kletsai}
+    # Neon: jdbc:postgresql://<host>/<db>?sslmode=require  (a JDBC URL, not the postgres:// one)
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/kletsai}
+    username: ${DATABASE_USERNAME:kletsai}
+    password: ${DATABASE_PASSWORD:kletsai}
+    hikari:
+      # Small pool: 512 MB RAM on Render's free tier and a connection limit on Neon's free tier.
+      maximum-pool-size: 5
+  flyway:
+    # Migrations in db/migration run on every startup, before JPA validates the schema.
+    enabled: true
   jpa:
     open-in-view: false
     hibernate:
@@ -15,13 +32,28 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  ai:
+    anthropic:
+      # The placeholder lets the app start without a key (chat then returns 503).
+      api-key: ${ANTHROPIC_API_KEY:not-set}
+      timeout: 60s
 
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health          # only /actuator/health, used by Render's health check
+  endpoint:
+    health:
+      show-details: never
 
 kletsai:
+  # Comma-separated origins allowed to call /api from a browser, e.g. https://kletsai.onrender.com
+  allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200}
   single-user-id: 00000000-0000-0000-0000-000000000001
   time-zone: Europe/Amsterdam
+  ai:
+    model: claude-opus-5-5
+    max-tokens: 4096
+    effort: low
+    max-history-messages: 40

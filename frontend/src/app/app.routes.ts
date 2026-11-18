@@ -6,5 +6,7 @@ export const routes: Routes = [
   { path: 'cards', title: 'Cards · KletsAI', loadComponent: () => import('./features/cards/cards-page').then((m) => m.CardsPage) },
   { path: 'cards/new', title: 'New card · KletsAI', loadComponent: () => import('./features/cards/card-form-page').then((m) => m.CardFormPage) },
   { path: 'cards/:id', title: 'Edit card · KletsAI', loadComponent: () => import('./features/cards/card-form-page').then((m) => m.CardFormPage) },
+  { path: 'chat', title: 'Praten · KletsAI', loadComponent: () => import('./features/chat/chat-home-page').then((m) => m.ChatHomePage) },
+  { path: 'chat/:id', title: 'Praten · KletsAI', loadComponent: () => import('./features/chat/chat-page').then((m) => m.ChatPage) },
   { path: '**', redirectTo: '' },
 ];
